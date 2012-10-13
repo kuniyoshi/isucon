@@ -1,6 +1,6 @@
 { "servers":
   { "reverseproxy": ["127.0.0.1"],
-    "webap": ["127.0.0.1"],
-    "database": ["localhost"]}
+    "webap": ["192.168.1.124"],
+    "database": ["192.168.1.124"]}
 }
 
