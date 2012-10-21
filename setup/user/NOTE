@@ -3,8 +3,9 @@ visudo:
     wheel を nopass
     requiretty をコメントアウト
 
-
-user の group を isucon,wheel にするとどうか
-デフォルトグループ
-
 make ISUCON_GROUP=isucon
+
+root のパスワードを簡単なものにしておく
+
+newgrp で isucon にしてから作業する
+
