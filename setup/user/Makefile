@@ -1,6 +1,6 @@
 USERADD=/usr/sbin/useradd
 ISUCON_GROUP=isucon
-HOSTS="192.168.1.122 192.168.1.123 192.168.1.124"
+HOSTS=192.168.1.122 192.168.1.123 192.168.1.124
 
 all: prepare root rsync_root purasi-bo
 
@@ -17,7 +17,7 @@ rsync_root:
 
 prepare:
 	yum install -y zsh
-	for x in $(HOSTS); do ssh yum install -y zsh; done
+	for x in $(HOSTS); do ssh $$x yum install -y zsh; done
 
 purasi-bo:
 	$(USERADD) -G wheel,$(ISUCON_GROUP) -s /bin/zsh purasi-bo
