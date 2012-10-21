@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/local/bin/git daemon --export-all --base-path=/home/isucon/src /home/isucon/src
