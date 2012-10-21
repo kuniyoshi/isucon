@@ -4,7 +4,7 @@ NGINX_BALL="${NGINX}.tar.gz"
 OPTIONS=option.list
 INIT_FILE=nginx
 
-if [ `echo `whoami`` != "root" ]
+if [ `whoami` != "root" ]
 then
     echo "need root privilege."
     exit 1
