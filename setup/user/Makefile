@@ -2,7 +2,7 @@ USERADD=/usr/sbin/useradd
 ISUCON_GROUP=isucon
 HOSTS=192.168.1.122 192.168.1.123 192.168.1.124
 
-all: prepare root rsync_root purasi-bo
+all: root rsync_root prepare purasi-bo
 
 root:
 	(umask 077 && mkdir /root/.ssh)
