@@ -6,7 +6,7 @@ var fs = require('fs'),
 var http_load = require('http_load'),
     engine = require('bench_engine.js');
 
-var HTTP_LOAD_PARALLEL = 2, //10,
+var HTTP_LOAD_PARALLEL = 10, //10,
     HTTP_LOAD_SECONDS = 60, //180,
     COMMENT_POST_PER_MIN_MAIN = 40,
     COMMENT_POST_PER_MIN_OPT = 20,
