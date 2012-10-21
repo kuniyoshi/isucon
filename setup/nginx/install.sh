@@ -10,8 +10,11 @@ then
     exit 1
 fi
 
+yum install -y pcre-devel
+
 rm -Rf $NGINX
 tar zxf $NGINX_BALL
+
 pushd $NGINX
 cp ../$OPTIONS $OPTIONS
 ./configure $(cat $OPTIONS)
