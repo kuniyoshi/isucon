@@ -17,8 +17,7 @@ tar zxf $NGINX_BALL
 
 pushd $NGINX
 cp ../$OPTIONS $OPTIONS
-./configure $(cat $OPTIONS)
-make && make install
+./configure $(cat $OPTIONS) && make && make install
 popd
 cp $INIT_FILE /etc/init.d/$INIT_FILE
 chown root:root /etc/init.d/$INIT_FILE
