@@ -1,0 +1,10 @@
+visudo:
+    パスワードなし
+    wheel を nopass
+    requiretty をコメントアウト
+
+
+user の group を isucon,wheel にするとどうか
+デフォルトグループ
+
+make ISUCON_GROUP=isucon
