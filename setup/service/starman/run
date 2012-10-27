@@ -1,0 +1,4 @@
+#!/bin/sh
+export PATH=/home/isucon/isucon/webapp/perl/extlib/bin
+export PERL5LIB=/home/isucon/isucon/webapp/perl/extlib/lib/perl5
+start_server --port 192.168.1.122:5000 -- starman --workers 8 /home/isucon/isucon/webapp/perl/app.psgi
