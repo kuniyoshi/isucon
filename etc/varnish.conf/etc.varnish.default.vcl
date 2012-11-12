@@ -150,6 +150,5 @@ sub vcl_miss {
 }
 
 sub vcl_fetch {
-    //set beresp.do_esi = true;
-    esi;
+    set beresp.do_esi = true;
 }
