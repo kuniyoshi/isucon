@@ -1,18 +1,22 @@
+# This is a basic VCL configuration file for varnish.  See the vcl(7)
+# man page for details on VCL syntax and semantics.
+# 
+# Default backend definition.  Set this to point to your content
+# server.
+# 
 backend default {
-    .host = "192.168.1.122";
-    .port = "5000";
+  .host = "192.168.1.122";
+  .port = "5000";
 }
-
 # 
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
-# 
 # sub vcl_recv {
 #     if (req.restarts == 0) {
 # 	if (req.http.x-forwarded-for) {
 # 	    set req.http.X-Forwarded-For =
-# 		req.http.X-Forwarded-For ", " client.ip;
+# 		req.http.X-Forwarded-For + ", " + client.ip;
 # 	} else {
 # 	    set req.http.X-Forwarded-For = client.ip;
 # 	}
@@ -53,19 +57,16 @@ backend default {
 # }
 # 
 # sub vcl_hash {
-#     set req.hash += req.url;
+#     hash_data(req.url);
 #     if (req.http.host) {
-#         set req.hash += req.http.host;
+#         hash_data(req.http.host);
 #     } else {
-#         set req.hash += server.ip;
+#         hash_data(server.ip);
 #     }
 #     return (hash);
 # }
 # 
 # sub vcl_hit {
-#     if (!obj.cacheable) {
-#         return (pass);
-#     }
 #     return (deliver);
 # }
 # 
@@ -74,11 +75,14 @@ backend default {
 # }
 # 
 # sub vcl_fetch {
-#     if (!beresp.cacheable) {
-#         return (pass);
-#     }
-#     if (beresp.http.Set-Cookie) {
-#         return (pass);
+#     if (beresp.ttl <= 0s ||
+#         beresp.http.Set-Cookie ||
+#         beresp.http.Vary == "*") {
+# 		/*
+# 		 * Mark as "Hit-For-Pass" for the next 2 minutes
+# 		 */
+# 		set beresp.ttl = 120 s;
+# 		return (hit_for_pass);
 #     }
 #     return (deliver);
 # }
@@ -89,19 +93,20 @@ backend default {
 # 
 # sub vcl_error {
 #     set obj.http.Content-Type = "text/html; charset=utf-8";
+#     set obj.http.Retry-After = "5";
 #     synthetic {"
 # <?xml version="1.0" encoding="utf-8"?>
 # <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 #  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 # <html>
 #   <head>
-#     <title>"} obj.status " " obj.response {"</title>
+#     <title>"} + obj.status + " " + obj.response + {"</title>
 #   </head>
 #   <body>
-#     <h1>Error "} obj.status " " obj.response {"</h1>
-#     <p>"} obj.response {"</p>
+#     <h1>Error "} + obj.status + " " + obj.response + {"</h1>
+#     <p>"} + obj.response + {"</p>
 #     <h3>Guru Meditation:</h3>
-#     <p>XID: "} req.xid {"</p>
+#     <p>XID: "} + req.xid + {"</p>
 #     <hr>
 #     <p>Varnish cache server</p>
 #   </body>
@@ -109,7 +114,14 @@ backend default {
 # "};
 #     return (deliver);
 # }
-#
+# 
+# sub vcl_init {
+# 	return (ok);
+# }
+# 
+# sub vcl_fini {
+# 	return (ok);
+# }
 acl purge {
     "localhost";
     "192.168.1.0"/24;
@@ -135,4 +147,9 @@ sub vcl_miss {
     if (req.request == "PURGE") {
         error 404 "Not in cache.";
     }
+}
+
+sub vcl_fetch {
+    //set beresp.do_esi = true;
+    esi;
 }
