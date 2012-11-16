@@ -4,10 +4,44 @@
 # Default backend definition.  Set this to point to your content
 # server.
 # 
+
 backend default {
-  .host = "192.168.1.122";
-  .port = "5000";
+    .host = "127.0.0.1";
+    .port = "5000";
 }
+
+### backend app1 {
+###     .host   = "192.168.1.122";
+###     .port   = "5000";
+### #    .probe  = {
+### #        .url = "/probe";
+### #    }
+### }
+### 
+### /*
+### backend app2 {
+###     .host   = "192.168.1.123";
+###     .port   = "5000";
+### #    .probe  = {
+### #        .url = "/probe";
+### #    }
+### }
+### */
+### 
+### director default random {
+###     .retries    = 5;
+###     {
+###         .backend    = app1;
+###         .weight     = 7;
+###     }
+### /*
+###     {
+###         .backend    = app2;
+###         .weight     = 0;
+###     }
+### */
+### }
+
 # 
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be
@@ -122,23 +156,35 @@ backend default {
 # sub vcl_fini {
 # 	return (ok);
 # }
+
 acl purge {
     "localhost";
     "192.168.1.0"/24;
 }
 
 sub vcl_recv {
-    if (req.request == "PURGE") {
+    if (req.request == "PURGE" || req.request == "GRACE") {
         if (!client.ip ~ purge) {
             error 405 "Not allowed.";
         }
+
+        if (req.request == "GRACE") {
+            set req.grace = 2s;
+        }
+
         return (lookup);
     }
 }
 
 sub vcl_hit {
-    if (req.request == "PURGE") {
-        set obj.ttl = 0s;
+    if (req.request == "PURGE" || req.request == "GRACE") {
+        purge;
+
+        if (req.request == "GRACE") {
+            set obj.grace = 2s;
+            return (restart);
+        }
+
         error 200 "Purged.";
     }
 }
@@ -146,9 +192,15 @@ sub vcl_hit {
 sub vcl_miss {
     if (req.request == "PURGE") {
         error 404 "Not in cache.";
+    } else if (req.request == "GRACE") {
+        set bereq.request = "GET";
     }
 }
 
 sub vcl_fetch {
     set beresp.do_esi = true;
+
+    if (req.request == "GRACE") {
+        set beresp.grace = 2s;
+    }
 }

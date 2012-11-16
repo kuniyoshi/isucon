@@ -70,10 +70,10 @@ VARNISH_ADMIN_LISTEN_PORT=6082
 VARNISH_SECRET_FILE=/etc/varnish/secret
 #
 # # The minimum number of worker threads to start
-VARNISH_MIN_THREADS=800
+VARNISH_MIN_THREADS=400
 #
 # # The Maximum number of worker threads to start
-VARNISH_MAX_THREADS=800
+VARNISH_MAX_THREADS=500
 #
 # # Idle timeout for worker threads
 VARNISH_THREAD_TIMEOUT=10
@@ -100,6 +100,7 @@ DAEMON_OPTS="-a ${VARNISH_LISTEN_ADDRESS}:${VARNISH_LISTEN_PORT} \
              -w ${VARNISH_MIN_THREADS},${VARNISH_MAX_THREADS},${VARNISH_THREAD_TIMEOUT} \
              -u www -g www \
              -S ${VARNISH_SECRET_FILE} \
+             -p sess_timeout=1 \
              -s ${VARNISH_STORAGE}"
 #
 
