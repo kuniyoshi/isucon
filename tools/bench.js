@@ -37,8 +37,10 @@ function isValidHtml(content){
 
 function prepare(callback){
   engine.getArticle('/', targetHost, targetPort, function(err, content){
-    if (err){ output(null, null, {summary:'error', reason:['failed to GET /']}, null, function(err){process.exit(1); return;}); }
-    if (! isValidHtml(content)){
+    if (err) {
+        output(null, null, {summary:'error', reason:['failed to GET /']}, null, function(err) { process.exit(1); return;});
+    }
+    if (!isValidHtml(content)) {
       output(null, null, {summary:'error', reason:['Content of / is broken']}, null, function(err){
         process.exit(1); return;
       });
@@ -52,8 +54,8 @@ function prepare(callback){
       }
       engine.postArticle({
         hostname:targetHost, portnum:targetPort, articlesize:1000, articleid:articleId
-      }, function(err, articleid, data){
-        if (err){
+      }, function(err, articleid, data) {
+        if (err) {
           output(null, null, {summary:'error', reason:['error on post article id (maybe):' + articleId]}, null, function(err){
             process.exit(1); return;
           });
@@ -81,11 +83,12 @@ function load(dirpath, articleid, data){
 
   var posterId = setInterval(function(){
     commentposter(articleid, function(r){
-      if (poster_result === null || (poster_result.summary === 'success' && r.summary !== 'success'))
+      if (poster_result === null || (poster_result.summary === 'success' && r.summary !== 'success')) {
         poster_result = r;
-      else if (poster_result.summary === 'failed' && r.summary === 'failed') {
-        if (! poster_result.reason)
+      } else if (poster_result.summary === 'failed' && r.summary === 'failed') {
+        if (!poster_result.reason) {
           poster_result.reason = [];
+        }
         poster_result.reason = poster_result.reason.concat(r.reason);
       }
     });
@@ -174,32 +177,43 @@ function checkLinkInSidebar(articleid, path, content, callback){
 function postCommentAndCheck(articleid, size, checkContent, callback){
   var spec = {articleid: articleid, size: size, hostname: targetHost, portnum: targetPort};
   engine.postComment(spec, function(err, name, body){
-    if (err) { callback({summary:'failed', reason:['POST request failed']}); return; }
+    if (err) {
+        callback({summary:'failed', reason:['POST request failed']}); return;
+    }
     if (! checkContent) { callback({summary:'success'}); return; }
 
     setTimeout(function(){
       async.parallel([
         function(cb){
           engine.getArticle('/article/' + articleid, targetHost, targetPort, true, function(err, content){
-            if (err) { cb(null, {summary:'failed', reason:['GET request failed after comment posted']}); return; }
+            if (err) {
+                cb(null, {summary:'failed', reason:['GET request failed after comment posted']});
+                return;
+            }
             checkCommentFrom(name, body, articleid, content, function(obj){cb(null, obj);});
           });
         },
         function(cb){
           engine.getArticle('/', targetHost, targetPort, true, function(err, content){
-            if (err) { cb(null, {summary:'failed', reason:['GET request of / failed after comment posted']}); return; }
+            if (err) {
+                cb(null, {summary:'failed', reason:['GET request of / failed after comment posted']});
+                return;
+            }
             checkLinkInSidebar(articleid, '/', content, function(obj){cb(null, obj);});
           });
         },
         function(cb){
           var random_id = Math.floor(Math.random() * articleid + 1);
           var check_path  = '/article/' + random_id;
-          engine.getArticle(check_path, targetHost, targetPort, true, function(err, content){
-            if (err) { cb(null, {summary:'failed', reason:['GET request of ' + check_path + ' failed after comment posted']}); return; }
+          engine.getArticle(check_path, targetHost, targetPort, true, function(err, content) {
+            if (err) {
+                cb(null, {summary:'failed', reason:['GET request of ' + check_path + ' failed after comment posted']});
+                return;
+            }
             checkLinkInSidebar(articleid, check_path, content, function(obj){cb(null, obj);});
           });
         }
-      ], function(err, results){
+      ], function(err, results) {
         var summary = 'success';
         var reason = [];
         results.forEach(function(r){
@@ -254,7 +268,10 @@ function checkArticle(articleid, data, callback){
     data = article.data;
   }
   engine.getArticle('/article/' + articleid, targetHost, targetPort, true, function(err, content){
-    if (err){ callback({summary:'error', reason:['in checkArticle']}); return; }
+    if (err) {
+        callback({summary:'error', reason:['in checkArticle']});
+        return;
+    }
     if (! isValidHtml(content)){
       callback({summary: 'error', reason:['in checkArticle, content is not valid html, size:' + content.length]});
       return;
