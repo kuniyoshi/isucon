@@ -19,6 +19,8 @@ requires 'DBI', 1.616;
 requires 'DBD::mysql';
 requires 'JSON';
 requires 'Server::Starter';
+requires 'Net::Server::SS::PreFork';
 requires 'Furl';
+requires 'Cache::Memcached';
 
 WriteAll;
