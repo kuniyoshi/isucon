@@ -1,0 +1,13 @@
+#!/bin/sh
+export PATH=/home/isucon/isucon/webapp/perl/extlib/bin:$PATH
+export PERL5LIB=/home/isucon/isucon/webapp/perl/extlib/lib/perl5:/home/isucon/isucon/webapp/perl/lib
+export CACHE_MODE=1
+PSGI_FILE=/home/isucon/isucon/webapp/perl/app.psgi
+exec start_server\
+ --port 192.168.1.122:5000\
+ --\
+  starman --user www\
+  --workers 8\
+  --access-log /dev/stdout\
+  $PSGI_FILE\
+  2>&1

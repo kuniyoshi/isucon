@@ -1,3 +1,4 @@
+<!--esi
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,16 +15,14 @@
 <div id="titleimage"><a href="<: $c.req.uri_for('/post') :>"><img src="<: $c.req.uri_for('/images/isucon_title.jpg') :>" style="border: none;"></a></div>
 <div id="mainview">
 <div id="sidebar">
-<table>
-<tr><td>新着コメントエントリ</td></tr>
-: for $c.stash.recent_commented_articles -> $article {
-<tr><td><a href="<: $c.req.uri_for('/article/'~$article.id) :>"><: $article.title :></a></td></tr>
-: }
-</table> 
+-->
+<esi:include src="/side" />
+<!--esi
 </div>
 <div id="articleview">
 : block content -> { }
-</div> 
+</div>
 </div>
 </body>
 </html>
+-->

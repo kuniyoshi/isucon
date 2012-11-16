@@ -1,0 +1,6 @@
+<table>
+	<tr><td>新着コメントエントリ</td></tr>
+: for $c.stash.recent_commented_articles -> $article {
+	<tr><td><a href="<: $c.req.uri_for('/article/'~$article.id) :>"><: $article.title :></a></td></tr>
+: }
+</table>
