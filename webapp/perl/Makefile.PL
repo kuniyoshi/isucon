@@ -18,5 +18,7 @@ requires 'Class::Accessor::Lite';
 requires 'DBI', 1.616;
 requires 'DBD::mysql';
 requires 'JSON';
+requires 'Server::Starter';
+requires 'Furl';
 
 WriteAll;
