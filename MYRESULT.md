@@ -67,9 +67,9 @@ MacBook AirのVMware FusionでVMを3つ動かしています。
 
 * MacBook Air
 
-    OS: OS X 10.8.2
-    CPU: 1.6 GHz Intel Core i5
-    Memory: 4 GB 1333 MHz DDR3
+        OS: OS X 10.8.2
+        CPU: 1.6 GHz Intel Core i5
+        Memory: 4 GB 1333 MHz DDR3
 
 * rev1
 
