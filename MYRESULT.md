@@ -73,21 +73,21 @@ MacBook AirのVMware FusionでVMを3つ動かしています。
 
 * rev1
 
-    OS: Scientific Linux release 6.3 (Carbon), 2.6.32-279.el6.x86_64
-    CPU: 2 VCPUs
-    Memory: 512 MB
+        OS: Scientific Linux release 6.3 (Carbon), 2.6.32-279.el6.x86_64
+        CPU: 2 VCPUs
+        Memory: 512 MB
 
 * app1
 
-    OS: Scientific Linux release 6.3 (Carbon), 2.6.32-279.el6.x86_64
-    CPU: 2 VCPUs
-    Memory: 512 MB
+        OS: Scientific Linux release 6.3 (Carbon), 2.6.32-279.el6.x86_64
+        CPU: 2 VCPUs
+        Memory: 512 MB
 
 * db1
 
-    OS: Scientific Linux release 6.3 (Carbon), 2.6.32-279.el6.x86_64
-    CPU: 2 VCPUs
-    Memory: 512 MB
+        OS: Scientific Linux release 6.3 (Carbon), 2.6.32-279.el6.x86_64
+        CPU: 2 VCPUs
+        Memory: 512 MB
 
 構成の詳細
 ==========
@@ -119,19 +119,19 @@ VarnishのためにOSパラメータ設定しましたので、下に書きま�
 * worker threadsが1000くらいで上限になってしまうので/etc/security/limits.conf
     を変えてます。結局1000の上限は超えられませんでした。
 
-    www             -       sigpending      16384
-    www             -       nofile          16384
-    www             -       nproc           32768
+        www             -       sigpending      16384
+        www             -       nofile          16384
+        www             -       nproc           32768
 
 * TIME_WAITが4000を超えたあたりでhttp_loadがEADDRINUSEを報告するようなったので、
     tcp関連のパラメータ変えました。メモリも変えましたが、いらなかったかもしれません。
 
-    net.ipv4.tcp_fin_timeout = 10
-    net.ipv4.tcp_tw_reuse = 1
-    net.ipv4.tcp_tw_recycle = 1
-    net.ipv4.tcp_mem = 44736 59648 89472
-    net.ipv4.tcp_wmem = 16384 16384 1908736
-    net.ipv4.tcp_rmem = 16384 87380 1908736
+        net.ipv4.tcp_fin_timeout = 10
+        net.ipv4.tcp_tw_reuse = 1
+        net.ipv4.tcp_tw_recycle = 1
+        net.ipv4.tcp_mem = 44736 59648 89472
+        net.ipv4.tcp_wmem = 16384 16384 1908736
+        net.ipv4.tcp_rmem = 16384 87380 1908736
 
 app1
 ----
