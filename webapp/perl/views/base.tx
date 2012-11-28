@@ -1,4 +1,3 @@
-<!--esi
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,9 +14,7 @@
 <div id="titleimage"><a href="<: $c.req.uri_for('/post') :>"><img src="<: $c.req.uri_for('/images/isucon_title.jpg') :>" style="border: none;"></a></div>
 <div id="mainview">
 <div id="sidebar">
--->
 <esi:include src="/side" />
-<!--esi
 </div>
 <div id="articleview">
 : block content -> { }
@@ -25,4 +22,3 @@
 </div>
 </body>
 </html>
--->
